@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    {% load static %}
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'history/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>
+        bin overview
+    </title>
+</head>
+<body>
+    <div class="container">
+        {% if material_list %}
+        <a href="{% url 'history:detail' material_list.2.id %}">
+            <div class="glass">
+                {{ material_list.2 }}
+            </div>
+        </a>
+        <a href="{% url 'history:detail' material_list.1.id %}">
+            <div class="plastic">
+                {{ material_list.1 }}
+            </div>
+        </a>
+        <a href="{% url 'history:detail' material_list.0.id %}">
+            <div class="metal">
+                {{ material_list.0 }}
+            </div>
+        </a>
+        <a href="{% url 'history:detail' material_list.3.id %}">
+            <div class="mixed">
+                {{ material_list.3 }}
+            </div>
+        </a>
+        
+        {% else %}
+            <p>No material are available.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

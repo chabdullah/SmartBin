@@ -1,0 +1,94 @@
+html body {
+    margin: 0;
+    background-color: floralwhite;
+    height: auto;
+    font-family: 'Fredoka One', cursive;
+    font-size: 48px;
+}
+
+body .container {
+    background-color: cadetblue;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: stretch;
+    flex-wrap: wrap;
+    height: 100vh;
+}
+
+.metal {
+    background-color: rgb(220, 229, 222);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.metal:hover {
+    background: url(images/metal1.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.plastic {
+    background-color: rgb(26, 168, 162);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.plastic:hover {
+    background: url(images/plastic.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.glass {
+    background-color: rgb(137, 224, 61);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.glass:hover {
+    background: url(images/glass1.jpg) no-repeat center;
+    background-size: cover;
+}
+
+.mixed {
+    background-color: rgb(62, 62, 62);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    background-size: cover;
+}
+
+.mixed:hover {
+    background: url(images/mixed.jpg) no-repeat center;
+    background-size: cover;
+}
+
+a {
+    color: white;
+    flex-grow: 1;
+    text-decoration: none;
+    justify-content: space-around;
+    width: 100vw;
+    -webkit-transition: width 0.5s;
+    transition: 1s ease;
+}
+
+a:hover {
+    color: rgba(0,0,0,0);
+    width: 30%;
+}
+
+@media all and (min-width: 780px) {
+    a {
+        width: 20vw; 
+    }
+}
+
+

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    {% load static %}
+    
+    <link rel="stylesheet" type="text/css" href="{% static 'history/style.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>
+        bin overview
+    </title>
+</head>
+<h1>{{ material.material }}</h1>
+
+{% if error_message %}
+    <p><strong>{{ error_message }}</strong></p>
+{% endif %}
+
+{% with trash_list=material.throwntrash_set.all %}
+{% if trash_list %}
+    <ul>
+    {% for trash in trash_list %}
+        <h3>
+            weight: {{trash.weight}}g
+            date: {{trash.thrown_date}}
+        </h3>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No trash is available.</p>
+{% endif %}
+{% endwith %}
