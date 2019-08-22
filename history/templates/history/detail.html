@@ -12,7 +12,13 @@
         Metal Binladen
     </title>
 </head>
-<h1>{{ material.material }}</h1>
+    
+    
+<body>  
+    <div class="flexTable">
+        <div class="materialTitle">
+            {{ material.material }}
+        </div>
 
 {% if error_message %}
     <p><strong>{{ error_message }}</strong></p>
@@ -22,10 +28,11 @@
 {% if trash_list %}
     <ul>
     {% for trash in trash_list %}
-        <h3>
-            weight: {{trash.weight}}g
-            date: {{trash.thrown_date}}
-        </h3>
+        <div class="flexTableItem">
+            <div>weight: {{trash.weight}}g</div>
+            <div>-</div>
+            <div>date: {{trash.thrown_date}}</div>
+        </div>
     {% endfor %}
     </ul>
 {% else %}
