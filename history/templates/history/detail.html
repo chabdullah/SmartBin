@@ -2,6 +2,87 @@
 <html lang="en" dir="ltr">
 <head>
     {% load static %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <script>
+        {% block jquery %}
+            var myObj, x;
+            var endpoint = '/history/api/chart/data'
+            var defaultData = []
+            var labels = []
+
+
+            $.ajax({
+                method: "GET",
+                url: endpoint,
+                success: function(data){
+                    //labels = data.labels
+                    //defaultData = data.default
+                    console.log(data)
+                    console.log(data.length)
+                    console.log("{{ material.material}} ")
+                    var material_type
+                    if("{{ material.material }}" == "metal"){
+                        material_type = 1
+                    }else if("{{ material.material }}" == "plastic"){
+                        material_type = 2
+                    }else if("{{ material.material }}" == "glass"){
+                        material_type = 3
+                    }else if("{{ material.material }}" == "mixed"){
+                        material_type = 4
+                    }
+
+                    var old_date = data[0].fields.thrown_date.substring(5,10)
+                    var new_date
+                    var sum_weight = 0
+                    for (var i=0; i<data.length;i++){
+                        if(material_type == data[i].fields.material) {
+
+                            new_date = data[i].fields.thrown_date.substring(5,10)
+                            if (new_date != old_date){
+                                defaultData.push(sum_weight)
+                                labels.push(old_date)
+                                console.log(old_date)
+                                console.log(old_date)
+                                sum_weight = data[i].fields.weight
+                            }else{
+                                sum_weight += data[i].fields.weight
+                            }
+                            old_date = new_date
+                        }
+                    }
+                    defaultData.push(sum_weight)
+                    labels.push(old_date)
+                    setChart()
+                },
+                error: function(error_data){
+                    console.log("error")
+                    console.log(error_data)
+                }
+            })
+
+            function setChart(){
+                var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Grammi',
+                                data: defaultData,
+                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                borderWidth: 1
+                            }]
+                        }
+                    })
+            }
+            function changeColor() {
+                myChart.data.datasets.backgroundColor = 'rgba(254, 62, 235, 1)';
+            }
+
+        {% endblock %}
+    </script>
     
     <link rel="stylesheet" type="text/css" href="{% static 'history/style.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
@@ -9,7 +90,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <title>
-        Metal Binladen
+        Metal Bin
     </title>
 </head>
     
@@ -27,13 +108,16 @@
 {% with trash_list=material.throwntrash_set.all %}
 {% if trash_list %}
     <ul>
-    {% for trash in trash_list %}
+    <canvas id="myChart" width="400" height="400"></canvas>
+    {% for trash in trash_list reversed %}
         <div class="flexTableItem">
-            <div>weight: {{trash.weight}}g</div>
+            <div onfocusin="changeColor()">weight: {{trash.weight}}g</div>
             <div>-</div>
             <div>date: {{trash.thrown_date}}</div>
         </div>
     {% endfor %}
+    <p id="demo"></p>
+
     </ul>
 {% else %}
     <p>No trash is available.</p>
