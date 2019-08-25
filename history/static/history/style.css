@@ -86,62 +86,6 @@ a:hover {
 }
 
 
-.flexTable{
-    display: flex;
-    width: 85%;
-    margin-top: 2%;
-    margin-left: auto;
-    margin-right: auto;
-    flex-direction: column;
-    align-items: center;
-    background-color: white;
-}
-
-
-.materialTitle{
-    background-color: darkcyan;
-    width: 60%;
-    margin-top: 3%;
-    border-radius: 20px;
-    border-bottom: 5px solid black;
-    text-align: center;
-    line-height: 75px;
-    font-size: 50px;
-    color: white;
-}
-
-
-.flexTableItem {
-    display: flex;
-    background-color: white;
-    width: 100%;
-    opacity: 0.7;
-    border-radius: 5px;
-    margin-bottom: 2px;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-bottom: 5px solid black;
-    text-align: center;
-    line-height: 75px;
-    font-size: 24px;
-}
-
-
-.flexTableItem:hover {
-    background-color: darkcyan;
-    opacity: 1;
-    color: whitesmoke;
-    animation-name: item_animation;
-    animation-duration: 1s;
-}
-
-
-@keyframes item_animation {
-  0%   {background-color:white;}  
-  25%   {background-color:darkcyan;}
-  100% {background-color:darkcyan;}
-}
-
 
 @media all and (min-width: 780px) {
     a {

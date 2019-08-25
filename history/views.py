@@ -51,16 +51,6 @@ class ChartData(APIView):
         material = ThrownTrash.objects.all()
         material = serializers.serialize('json',material)
 
-        #for trash in trash_list:
-        #    default_items = np.append(default_items,trash.weight)
-
-
-        labels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15']
-        default_items = [4,6,8,5,8,10,5,8,10,10,5,8,6,14,6]
-        data = {
-            "labels": labels,
-            "default": default_items,
-        }
         return HttpResponse(material, content_type="application/json")
         #return Response(data)
 

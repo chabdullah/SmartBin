@@ -4,20 +4,22 @@
     {% load static %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
     <script>
         {% block jquery %}
             var myObj, x;
             var endpoint = '/history/api/chart/data'
             var defaultData = []
             var labels = []
+            var defaultAllData = []
+            var defaultAllOtherDara = []
+            var allLabels = []
 
 
             $.ajax({
                 method: "GET",
                 url: endpoint,
                 success: function(data){
-                    //labels = data.labels
-                    //defaultData = data.default
                     console.log(data)
                     console.log(data.length)
                     console.log("{{ material.material}} ")
@@ -35,24 +37,49 @@
                     var old_date = data[0].fields.thrown_date.substring(5,10)
                     var new_date
                     var sum_weight = 0
+                    var sum_all_weight = 0
                     for (var i=0; i<data.length;i++){
-                        if(material_type == data[i].fields.material) {
-
-                            new_date = data[i].fields.thrown_date.substring(5,10)
-                            if (new_date != old_date){
-                                defaultData.push(sum_weight)
-                                labels.push(old_date)
-                                console.log(old_date)
-                                console.log(old_date)
+                        new_date = data[i].fields.thrown_date.substring(5,10)
+                        if (new_date != old_date) {
+                            defaultData.push(sum_weight)
+                            defaultAllOtherDara.push(sum_all_weight)
+                            labels.push(old_date)
+                            if(material_type == data[i].fields.material) {
                                 sum_weight = data[i].fields.weight
                             }else{
+                                sum_weight = 0
+                            }
+                            sum_all_weight = data[i].fields.weight
+                        }else{
+                            if(material_type == data[i].fields.material) {
                                 sum_weight += data[i].fields.weight
                             }
-                            old_date = new_date
+                            sum_all_weight += data[i].fields.weight
                         }
+                        old_date = new_date
                     }
                     defaultData.push(sum_weight)
+                    defaultAllOtherDara.push(sum_all_weight)
                     labels.push(old_date)
+
+                    var metalWeight=0
+                    var glassWeight=0
+                    var plasticWeight=0
+                    var mixedWeight=0
+                    for(var i=0; i<data.length;i++){
+                        if(data[i].fields.material == 1){
+                           metalWeight +=  data[i].fields.weight
+                        }else if(data[i].fields.material == 2){
+                           plasticWeight +=  data[i].fields.weight
+                        }else if(data[i].fields.material == 3){
+                           glassWeight +=  data[i].fields.weight
+                        }else if(data[i].fields.material == 4){
+                           mixedWeight +=  data[i].fields.weight
+                        }
+                    }
+                    defaultAllData = [metalWeight,plasticWeight,glassWeight,mixedWeight]
+                    allLabels = ['Metal','Plastic','Glass','Mixed']
+
                     setChart()
                 },
                 error: function(error_data){
@@ -63,63 +90,185 @@
 
             function setChart(){
                 var ctx = document.getElementById('myChart').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Grammi',
-                                data: defaultData,
-                                backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                                borderColor: 'rgba(54, 162, 235, 1)',
-                                borderWidth: 1
+                var ctx2 = document.getElementById('myChart2').getContext('2d');
+                var ctx3 = document.getElementById('myChart3').getContext('2d');
+                var myChart2 = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '{{material.material}}',
+                            data: defaultData,
+                            backgroundColor: 'rgba(14, 319,139,0.5)',
+                            borderColor: 'rgba(14, 319,139, 1)',
+                            borderWidth: 1
+                        },{
+                            label: 'All Materials',
+                            data: defaultAllOtherDara,
+                            backgroundColor: 'rgba(220,220,220,0.3)',
+                            borderColor: 'rgba(220,220,220, 0.3)',
+                            borderWidth: 1,
+                            hidden: true
+                        }]
+                    },
+                    options: {
+                      scales: {
+                          xAxes: [{
+                              scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                              }
+                            }],
+                          yAxes: [{
+                              scaleLabel: {
+                                display: true,
+                                labelString: 'Weight in g.'
+                              }
                             }]
-                        }
-                    })
-            }
-            function changeColor() {
-                myChart.data.datasets.backgroundColor = 'rgba(254, 62, 235, 1)';
+                      }
+                    }
+                })
+                var myChart2 = new Chart(ctx2, {
+                    type: 'bar',
+                    data: {
+                        labels: allLabels,
+                        datasets: [{
+                            label: 'All materials',
+                            data: defaultAllData,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.4)',
+                                'rgba(54, 62, 225, 0.4)',
+                                'rgba(7, 187, 245, 0.4)',
+                                'rgba(24, 112, 250, 0.4)',
+                            ],
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderWidth: 1
+                        }]
+                    }
+                })
+                var myChart3 = new Chart(ctx3, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: '{{material.material}}',
+                            data: defaultData,
+                            backgroundColor: 'rgba(14, 319,139,0.5)',
+                            borderColor: 'rgba(14, 319,139, 1)',
+                            borderWidth: 1
+                        },{
+                            label: 'All Materials',
+                            data: defaultAllOtherDara,
+                            backgroundColor: 'rgba(220,220,220,0.3)',
+                            borderColor: 'rgba(220,220,220, 0.3)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                      scales: {
+                          xAxes: [{
+                              scaleLabel: {
+                                display: true,
+                                labelString: 'Date'
+                              }
+                            }],
+                          yAxes: [{
+                              scaleLabel: {
+                                display: true,
+                                labelString: 'Weight in g.'
+                              }
+                            }]
+                      }
+                    }
+                })
             }
 
         {% endblock %}
     </script>
     
-    <link rel="stylesheet" type="text/css" href="{% static 'history/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'history/style_detail.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="utf-8">
     <title>
-        Metal Bin
+        Bin
     </title>
 </head>
     
     
-<body>  
-    <div class="flexTable">
-        <div class="materialTitle">
-            {{ material.material }}
-        </div>
+<body>
 
-{% if error_message %}
-    <p><strong>{{ error_message }}</strong></p>
-{% endif %}
+<nav class="navbar navbar-default navbar-toggler navbar-fixed-top hidden-xs">
 
-{% with trash_list=material.throwntrash_set.all %}
-{% if trash_list %}
-    <ul>
-    <canvas id="myChart" width="400" height="400"></canvas>
-    {% for trash in trash_list reversed %}
-        <div class="flexTableItem">
-            <div onfocusin="changeColor()">weight: {{trash.weight}}g</div>
-            <div>-</div>
-            <div>date: {{trash.thrown_date}}</div>
-        </div>
-    {% endfor %}
-    <p id="demo"></p>
+    <div class="navbar-header ">
+      <a class="navbar-brand" href="/history">Home</a>
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/history/1">Metal</a>
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/history/3">Plastic/Glass</a>
+    </div>
+    <div class="navbar-header">
+      <a class="navbar-brand" href="/history/4">Mixed</a>
+    </div>
+    <div class="nav navbar-nav navbar-right">
+      <a class="navbar-brand" href="/admin"><span class="glyphicon glyphicon-user"></span>Admin</a>
+    </div>
 
-    </ul>
-{% else %}
-    <p>No trash is available.</p>
-{% endif %}
-{% endwith %}
+</nav>
+
+
+
+
+<div class="col-md-10 col-sm-12 col-xs-12 flexTable">
+    <div class="materialTitle">
+        {{ material.material }}
+    </div>
+
+    {% if error_message %}
+        <p><strong>{{ error_message }}</strong></p>
+    {% endif %}
+
+    {% with trash_list=material.throwntrash_set.all %}
+        {% if trash_list %}
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <div class="col-md-9 col-sm-12 col-xs-12 chart">
+                    <canvas id="myChart" width="600" height="300"></canvas>
+                </div>
+                <div class="col-md-3 col-sm-12 col-xs-12 chart">
+                    <canvas id="myChart2" width="600" height="400"></canvas>
+                </div>
+                <div class="col-md-3 col-sm-12 col-xs-12 chart">
+                    <canvas id="myChart3" width="600" height="400"></canvas>
+                </div>
+            </div>
+
+
+            <div class="history">
+                <div class="materialHistory">
+                    History
+                </div>
+                    {% for trash in trash_list reversed %}
+                        {% if forloop.counter <= 10 %}
+                            <div class="flexTableItem col-md-12 centered col-sm-12 col-xs-12 ">
+                                <div class="col-md-1 col-sm-6 col-xs-12">{{ forloop.counter }}</div>
+                                <div class="col-md-5 col-sm-12 col-xs-12 ">weight: {{trash.weight}}g</div>
+                                <div class="col-md-5 col-sm-12 col-xs-12"> date: {{trash.thrown_date}}</div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+            </div>
+
+        {% else %}
+            <p>No trash is available.</p>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<div class="col-md-10 col-sm-12 col-xs-12 footer">
+    <div class="col-md-4">Telefono: 111-234567</div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4" style="text-align: right">Email: email@example.it</div>
+</div>
