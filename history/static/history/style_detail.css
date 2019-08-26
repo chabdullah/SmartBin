@@ -2,11 +2,12 @@ html body {
     font-family: 'Fredoka One', cursive;
     font-size: 48px;
     margin: 0;
+    padding-top: 50px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-    background: url(images/metal1.jpg);
+    background-image:url('images/metal1.jpg');
 }
 
 .metal {
@@ -75,9 +76,6 @@ li:before {
 
 
 
-
-
-
 .flexTable{
     display: flex;
     margin-left: auto;
@@ -86,11 +84,12 @@ li:before {
     flex-direction: column;
     align-items: center;
     background-color: white;
+    max-width: 1600px;
 }
 
 
 .materialTitle, .materialHistory{
-    background-color: darkcyan;
+    background-color: rgba(220, 229, 222, 0.6);
     width: 60%;
     margin-top: 3%;
     border-radius: 20px;
@@ -98,7 +97,7 @@ li:before {
     text-align: center;
     line-height: 75px;
     font-size: 50px;
-    color: white;
+    color: black;
 }
 
 .materialHistory{
@@ -123,9 +122,9 @@ li:before {
 
 
 .flexTableItem:hover {
-    background-color: darkcyan;
+    background-color: rgba(220, 229, 222, 1);
     opacity: 1;
-    color: whitesmoke;
+    color: black;
     animation-name: item_animation;
     animation-duration: 1s;
 }
@@ -133,8 +132,8 @@ li:before {
 
 @keyframes item_animation {
   0%   {background-color:white;}
-  25%   {background-color:darkcyan;}
-  100% {background-color:darkcyan;}
+  25%   {background-color:rgba(220, 229, 222, 1);}
+  100% {background-color:rgba(220, 229, 222, 1);}
 }
 
 
@@ -146,6 +145,7 @@ li:before {
     margin: auto 10%;
 }
 
+
 .footer{
     display: flex;
     flex-direction: row;
@@ -155,10 +155,18 @@ li:before {
     background-color: whitesmoke;
     font-size: 18px;
     color: grey;
+    max-width: 1600px;
 }
 
+
+.navbar-default .navbar-nav > div > a:hover, .navbar-default .navbar-nav > div > a:focus {
+    background-color: #FFFF00;
+    color: #FFC0CB;
+}
+
+
 @media (min-width: 1px) and (max-width: 834px){
-    .flexTableItem{
+    div{
         font-size: 12px;
     }
 }

@@ -2,9 +2,11 @@
 <html lang="en" dir="ltr">
 <head>
     {% load static %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0/dist/Chart.min.js"></script>
     <script>
         {% block jquery %}
             var myObj, x;
@@ -21,26 +23,32 @@
                 url: endpoint,
                 success: function(data){
                     console.log(data)
-                    console.log(data.length)
-                    console.log("{{ material.material}} ")
                     var material_type
+                    var mainColor
                     if("{{ material.material }}" == "metal"){
                         material_type = 1
+                        mainColor = 'rgba(220, 229, 222, 0.6)';
                     }else if("{{ material.material }}" == "plastic"){
                         material_type = 2
+                        mainColor = 'rgba(26, 168, 162, 0.6)';
                     }else if("{{ material.material }}" == "glass"){
                         material_type = 3
+                        mainColor = 'rgba(137, 224, 61, 0.6)';
                     }else if("{{ material.material }}" == "mixed"){
                         material_type = 4
+                        mainColor = 'rgba(62, 62, 62, 0.6)';
                     }
 
                     var old_date = data[0].fields.thrown_date.substring(5,10)
                     var new_date
                     var sum_weight = 0
                     var sum_all_weight = 0
+                    var date = new Date()
+                    if(data[0].fields.thrown_date.substring(5,7)>9)
+                        console.log(data[0].fields.thrown_date.substring(5,7))
                     for (var i=0; i<data.length;i++){
                         new_date = data[i].fields.thrown_date.substring(5,10)
-                        if (new_date != old_date) {
+                        if (new_date != old_date ) {
                             defaultData.push(sum_weight)
                             defaultAllOtherDara.push(sum_all_weight)
                             labels.push(old_date)
@@ -79,7 +87,6 @@
                     }
                     defaultAllData = [metalWeight,plasticWeight,glassWeight,mixedWeight]
                     allLabels = ['Metal','Plastic','Glass','Mixed']
-
                     setChart()
                 },
                 error: function(error_data){
@@ -89,24 +96,26 @@
             })
 
             function setChart(){
+                var mainColor = 'rgba(266, 8, 12, 0.6)'
+                var backgroundColor = 'rgba(220, 229, 222, 0.6)'
                 var ctx = document.getElementById('myChart').getContext('2d');
                 var ctx2 = document.getElementById('myChart2').getContext('2d');
                 var ctx3 = document.getElementById('myChart3').getContext('2d');
-                var myChart2 = new Chart(ctx, {
+                var myChart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: labels,
                         datasets: [{
                             label: '{{material.material}}',
                             data: defaultData,
-                            backgroundColor: 'rgba(14, 319,139,0.5)',
-                            borderColor: 'rgba(14, 319,139, 1)',
+                            backgroundColor: mainColor,
+                            borderColor: 'rgba(14, 319,139, 0)',
                             borderWidth: 1
                         },{
                             label: 'All Materials',
                             data: defaultAllOtherDara,
-                            backgroundColor: 'rgba(220,220,220,0.3)',
-                            borderColor: 'rgba(220,220,220, 0.3)',
+                            backgroundColor: backgroundColor,
+                            borderColor: 'rgba(220,220,220, 0)',
                             borderWidth: 1,
                             hidden: true
                         }]
@@ -129,19 +138,19 @@
                     }
                 })
                 var myChart2 = new Chart(ctx2, {
-                    type: 'bar',
+                    type: 'pie',
                     data: {
                         labels: allLabels,
                         datasets: [{
                             label: 'All materials',
                             data: defaultAllData,
                             backgroundColor: [
-                                'rgba(54, 162, 235, 0.4)',
-                                'rgba(54, 62, 225, 0.4)',
-                                'rgba(7, 187, 245, 0.4)',
-                                'rgba(24, 112, 250, 0.4)',
+                                'rgba(220, 229, 222, 0.6)',
+                                'rgba(26, 168, 162, 0.6)',
+                                'rgba(137, 224, 61, 0.6)',
+                                'rgba(62, 62, 62, 0.6)',
                             ],
-                            borderColor: 'rgba(54, 162, 235, 1)',
+                            borderColor: 'rgba(54, 162, 235, 0)',
                             borderWidth: 1
                         }]
                     }
@@ -153,14 +162,14 @@
                         datasets: [{
                             label: '{{material.material}}',
                             data: defaultData,
-                            backgroundColor: 'rgba(14, 319,139,0.5)',
-                            borderColor: 'rgba(14, 319,139, 1)',
+                            backgroundColor: mainColor,
+                            borderColor: 'rgba(14, 319,139, 0)',
                             borderWidth: 1
                         },{
                             label: 'All Materials',
                             data: defaultAllOtherDara,
-                            backgroundColor: 'rgba(220,220,220,0.3)',
-                            borderColor: 'rgba(220,220,220, 0.3)',
+                            backgroundColor: backgroundColor,
+                            borderColor: 'rgba(220,220,220, 0)',
                             borderWidth: 1
                         }]
                     },
@@ -185,7 +194,7 @@
 
         {% endblock %}
     </script>
-    
+
     <link rel="stylesheet" type="text/css" href="{% static 'history/style_detail.css' %}">
     <link href="https://fonts.googleapis.com/css?family=Fredoka+One&display=swap" rel="stylesheet">
     
@@ -199,24 +208,30 @@
     
 <body>
 
-<nav class="navbar navbar-default navbar-toggler navbar-fixed-top hidden-xs">
-
-    <div class="navbar-header ">
-      <a class="navbar-brand" href="/history">Home</a>
-    </div>
+<nav class="navbar navbar-default navbar-toggler navbar-fixed-top">
     <div class="navbar-header">
-      <a class="navbar-brand" href="/history/1">Metal</a>
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand myNavbar" href="/history">Home</a>
     </div>
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/history/3">Plastic/Glass</a>
+    <div class="collapse navbar-collapse" id="myNavbar">
+        <div class="navbar-header">
+          <a class="navbar-brand myNavbar" href="/history/1">Metal <span class="glyphicon glyphicon-paperclip"></span></a>
+        </div>
+        <div class="navbar-header">
+          <a class="navbar-brand myNavbar" href="/history/3">Plastic/Glass <span class="glyphicon glyphicon-glass" style="color:rgba(26, 168, 162, 0.6)"></span></a>
+        </div>
+        <div class="navbar-header">
+          <a class="navbar-brand myNavbar" href="/history/4">Mixed <span class="glyphicon glyphicon-apple" style="color:rgba(62, 62, 62, 0.6)"></span></a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+          <a class="navbar-brand myNavbar" href="/admin">
+              Admin <span class="glyphicon glyphicon-user"></span></a>
+        </div>
     </div>
-    <div class="navbar-header">
-      <a class="navbar-brand" href="/history/4">Mixed</a>
-    </div>
-    <div class="nav navbar-nav navbar-right">
-      <a class="navbar-brand" href="/admin"><span class="glyphicon glyphicon-user"></span>Admin</a>
-    </div>
-
 </nav>
 
 
@@ -234,14 +249,14 @@
     {% with trash_list=material.throwntrash_set.all %}
         {% if trash_list %}
             <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="col-md-9 col-sm-12 col-xs-12 chart">
+                <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12 chart">
                     <canvas id="myChart" width="600" height="300"></canvas>
                 </div>
-                <div class="col-md-3 col-sm-12 col-xs-12 chart">
-                    <canvas id="myChart2" width="600" height="400"></canvas>
+                <div class="col-md-6 col-sm-12 col-xs-12 chart">
+                    <canvas id="myChart3" width="300" height="200"></canvas>
                 </div>
-                <div class="col-md-3 col-sm-12 col-xs-12 chart">
-                    <canvas id="myChart3" width="600" height="400"></canvas>
+                <div class="col-md-6 col-sm-12 col-xs-12 chart">
+                    <canvas id="myChart2" width="300" height="200"></canvas>
                 </div>
             </div>
 
@@ -253,9 +268,9 @@
                     {% for trash in trash_list reversed %}
                         {% if forloop.counter <= 10 %}
                             <div class="flexTableItem col-md-12 centered col-sm-12 col-xs-12 ">
-                                <div class="col-md-1 col-sm-6 col-xs-12">{{ forloop.counter }}</div>
-                                <div class="col-md-5 col-sm-12 col-xs-12 ">weight: {{trash.weight}}g</div>
-                                <div class="col-md-5 col-sm-12 col-xs-12"> date: {{trash.thrown_date}}</div>
+                                <div class="col-md-1 col-sm-6 col-xs-12"><span class="glyphicon glyphicon-calendar"></span></div>
+                                <div class="col-md-5 col-sm-12 col-xs-12" style="text-align: left">{{trash.thrown_date}}</div>
+                                <div class="col-md-5 col-sm-12 col-xs-12" style="text-align: right">{{trash.weight}}g </div>
                             </div>
                         {% endif %}
                     {% endfor %}
@@ -267,8 +282,9 @@
     {% endwith %}
 </div>
 
+
 <div class="col-md-10 col-sm-12 col-xs-12 footer">
-    <div class="col-md-4">Telefono: 111-234567</div>
+    <div class="col-md-4">Telefono: 111234567</div>
     <div class="col-md-4"></div>
     <div class="col-md-4" style="text-align: right">Email: email@example.it</div>
 </div>
