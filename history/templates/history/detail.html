@@ -27,7 +27,7 @@
                     var mainColor
                     if("{{ material.material }}" == "metal"){
                         material_type = 1
-                        mainColor = 'rgba(220, 229, 222, 0.6)';
+                        mainColor = 'rgba(266, 8, 12, 0.6)';
                     }else if("{{ material.material }}" == "plastic"){
                         material_type = 2
                         mainColor = 'rgba(26, 168, 162, 0.6)';
@@ -87,7 +87,7 @@
                     }
                     defaultAllData = [metalWeight,plasticWeight,glassWeight,mixedWeight]
                     allLabels = ['Metal','Plastic','Glass','Mixed']
-                    setChart()
+                    setChart(mainColor)
                 },
                 error: function(error_data){
                     console.log("error")
@@ -95,8 +95,8 @@
                 }
             })
 
-            function setChart(){
-                var mainColor = 'rgba(266, 8, 12, 0.6)'
+            function setChart(main_color){
+                var mainColor = main_color
                 var backgroundColor = 'rgba(220, 229, 222, 0.6)'
                 var ctx = document.getElementById('myChart').getContext('2d');
                 var ctx2 = document.getElementById('myChart2').getContext('2d');
@@ -117,7 +117,7 @@
                             backgroundColor: backgroundColor,
                             borderColor: 'rgba(220,220,220, 0)',
                             borderWidth: 1,
-                            hidden: true
+                            hidden: false
                         }]
                     },
                     options: {
@@ -126,13 +126,19 @@
                               scaleLabel: {
                                 display: true,
                                 labelString: 'Date'
-                              }
+                              },
+				gridLines: {
+					display: false
+				}
                             }],
                           yAxes: [{
                               scaleLabel: {
                                 display: true,
                                 labelString: 'Weight in g.'
-                              }
+                              },
+				gridLines: {
+					display: false
+				}
                             }]
                       }
                     }
@@ -222,10 +228,13 @@
           <a class="navbar-brand myNavbar" href="/history/1">Metal <span class="glyphicon glyphicon-paperclip"></span></a>
         </div>
         <div class="navbar-header">
-          <a class="navbar-brand myNavbar" href="/history/3">Plastic/Glass <span class="glyphicon glyphicon-glass" style="color:rgba(26, 168, 162, 0.6)"></span></a>
+          <a class="navbar-brand myNavbar" href="/history/2">Plastic <span class="glyphicon glyphicon-refresh" style="color:rgba(0, 76, 153, 1)"></span></a>
         </div>
         <div class="navbar-header">
-          <a class="navbar-brand myNavbar" href="/history/4">Mixed <span class="glyphicon glyphicon-apple" style="color:rgba(62, 62, 62, 0.6)"></span></a>
+          <a class="navbar-brand myNavbar" href="/history/3">Glass <span class="glyphicon glyphicon-glass" style="color:rgba(26, 168, 162, 0.6)"></span></a>
+        </div>
+        <div class="navbar-header">
+          <a class="navbar-brand myNavbar" href="/history/4">Mixed <span class="glyphicon glyphicon-apple" style="color:rgba(165, 56, 56, 1)"></span></a>
         </div>
         <div class="nav navbar-nav navbar-right">
           <a class="navbar-brand myNavbar" href="/admin">
@@ -268,7 +277,7 @@
                     {% for trash in trash_list reversed %}
                         {% if forloop.counter <= 10 %}
                             <div class="flexTableItem col-md-12 centered col-sm-12 col-xs-12 ">
-                                <div class="col-md-1 col-sm-6 col-xs-12"><span class="glyphicon glyphicon-calendar"></span></div>
+                                <div class="col-md-1 col-sm-6 col-xs-12"><span class="glyphicon glyphicon-menu-right"></span></div>
                                 <div class="col-md-5 col-sm-12 col-xs-12" style="text-align: left">{{trash.thrown_date}}</div>
                                 <div class="col-md-5 col-sm-12 col-xs-12" style="text-align: right">{{trash.weight}}g </div>
                             </div>
@@ -284,7 +293,7 @@
 
 
 <div class="col-md-10 col-sm-12 col-xs-12 footer">
-    <div class="col-md-4">Telefono: 111234567</div>
+    <div class="col-md-4">Contact us: 111234567</div>
     <div class="col-md-4"></div>
     <div class="col-md-4" style="text-align: right">Email: email@example.it</div>
 </div>

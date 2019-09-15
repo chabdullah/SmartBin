@@ -89,20 +89,18 @@ li:before {
 
 
 .materialTitle, .materialHistory{
-    background-color: rgba(220, 229, 222, 0.6);
+    background-color: rgba(255, 255, 255, 0.6);
     width: 60%;
     margin-top: 3%;
-    border-radius: 20px;
-    border-bottom: 5px solid black;
     text-align: center;
     line-height: 75px;
-    font-size: 50px;
-    color: black;
+    font-size: 100px;
+    color: #2F8A87;
 }
 
 .materialHistory{
     line-height: 55px;
-    font-size: 30px;
+    font-size: 45px;
     margin: auto auto 2%;
 }
 
@@ -166,7 +164,13 @@ li:before {
 
 
 @media (min-width: 1px) and (max-width: 834px){
+    .materialTitle{
+        font-size: 70px;
+    }
+
     div{
         font-size: 12px;
     }
 }
+
+
