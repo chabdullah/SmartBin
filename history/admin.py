@@ -6,8 +6,8 @@ from .models import Materials, ThrownTrash
 
 admin.site.register(Materials)
 
-class ThrownThrashAdmin(admin.ModelAdmin):
+class ThrownTrashAdmin(admin.ModelAdmin):
     fields = ['material', 'weight', 'thrown_date']
     list_display = ('material', 'weight', 'thrown_date')
 
-admin.site.register(ThrownTrash, ThrownThrashAdmin)
+admin.site.register(ThrownTrash, ThrownTrashAdmin)
