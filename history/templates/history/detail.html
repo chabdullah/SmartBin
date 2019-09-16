@@ -16,6 +16,7 @@
             var defaultAllData = []
             var defaultAllOtherDara = []
             var allLabels = []
+            var countMaterialData = []
 
 
             $.ajax({
@@ -43,6 +44,7 @@
                     var new_date
                     var sum_weight = 0
                     var sum_all_weight = 0
+                    var count_material = 0
                     var date = new Date()
                     if(data[0].fields.thrown_date.substring(5,7)>9)
                         console.log(data[0].fields.thrown_date.substring(5,7))
@@ -50,23 +52,28 @@
                         new_date = data[i].fields.thrown_date.substring(5,10)
                         if (new_date != old_date ) {
                             defaultData.push(sum_weight)
+                            countMaterialData.push(count_material)
                             defaultAllOtherDara.push(sum_all_weight)
                             labels.push(old_date)
                             if(material_type == data[i].fields.material) {
                                 sum_weight = data[i].fields.weight
+                                count_material += 1
                             }else{
                                 sum_weight = 0
+                                count_material = 0
                             }
                             sum_all_weight = data[i].fields.weight
                         }else{
                             if(material_type == data[i].fields.material) {
                                 sum_weight += data[i].fields.weight
+                                count_material += 1
                             }
                             sum_all_weight += data[i].fields.weight
                         }
                         old_date = new_date
                     }
                     defaultData.push(sum_weight)
+                    countMaterialData.push(count_material)
                     defaultAllOtherDara.push(sum_all_weight)
                     labels.push(old_date)
 
@@ -167,15 +174,9 @@
                         labels: labels,
                         datasets: [{
                             label: '{{material.material}}',
-                            data: defaultData,
+                            data: countMaterialData,
                             backgroundColor: mainColor,
                             borderColor: 'rgba(14, 319,139, 0)',
-                            borderWidth: 1
-                        },{
-                            label: 'All Materials',
-                            data: defaultAllOtherDara,
-                            backgroundColor: backgroundColor,
-                            borderColor: 'rgba(220,220,220, 0)',
                             borderWidth: 1
                         }]
                     },
@@ -190,7 +191,7 @@
                           yAxes: [{
                               scaleLabel: {
                                 display: true,
-                                labelString: 'Weight in g.'
+                                labelString: 'Number of items.'
                               }
                             }]
                       }

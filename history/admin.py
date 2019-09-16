@@ -5,4 +5,9 @@ from django.contrib import admin
 from .models import Materials, ThrownTrash
 
 admin.site.register(Materials)
-admin.site.register(ThrownTrash)
+
+class ThrownThrashAdmin(admin.ModelAdmin):
+    fields = ['material', 'weight', 'thrown_date']
+    list_display = ('material', 'weight', 'thrown_date')
+
+admin.site.register(ThrownTrash, ThrownThrashAdmin)
